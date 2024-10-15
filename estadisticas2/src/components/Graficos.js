@@ -1,25 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
-import GraficoSalarios from './src/components/GraficoSalarios';
-import GraficoGeneros from './src/components/GraficoGenero';
-import Formulario from './src/components/Formulario';
-import GraficoReporteEnfermedades from './src/components/GraficoReporteEnfermedades';
+import GraficoSalarios from './GraficoSalarios';
+import GraficoGeneros from './GraficoGenero';
+import Formulario from './Formulario';
+import GraficoReporteEnfermedades from './GraficoReporteEnfermedades';
+import GraficoBezier from './GraficoBezier';
 import { collection, getDocs, query } from 'firebase/firestore';
 
 //Importación de conexión a firebase
-import db from './db/firebaseconfig';
-import Graficos from './src/components/Graficos';
+import db from '../../db/firebaseconfig';
 
-export default function App() {
+
+export default function Graficos() {
 
   const [bandera, setBandera] = useState(false); // Variable bandera
   const [dataSalarios, setDataSalarios] = useState({
-    labels: [],
-    datasets: [{ data: [] }] // Inicializa datasets como un array con un objeto
+    labels: [''],
+    datasets: [{ data: [0] }]
   });
   const [dataGeneros, setDataGeneros] = useState([]); // Para almacenar datos de géneros
 
-
+  const dataReporteEnfermedades = [
+    { date: "2017-01-05", count: 8 }, 
+    { date: "2017-01-19", count: 5 }, 
+    { date: "2017-02-06", count: 2 }, 
+    { date: "2017-02-20", count: 4 }, 
+    { date: "2017-03-07", count: 1 }, 
+    { date: "2017-03-21", count: 3 }, 
+    { date: "2017-04-05", count: 6 }, 
+    { date: "2017-04-19", count: 2 }, 
+    { date: "2017-05-03", count: 4 },
+    { date: "2017-05-17", count: 7 },
+    { date: "2017-06-06", count: 9 }, 
+    { date: "2017-06-20", count: 5 }, 
+    { date: "2017-07-05", count: 3 }, 
+    { date: "2017-07-19", count: 4 }, 
+    { date: "2017-08-07", count: 2 },  
+    { date: "2017-08-21", count: 8 },  
+    { date: "2017-09-06", count: 3 },
+    { date: "2017-09-20", count: 7 },
+    { date: "2017-10-04", count: 5 },
+    { date: "2017-10-18", count: 6 },
+    { date: "2017-11-06", count: 2 },
+    { date: "2017-11-20", count: 9 }, 
+    { date: "2017-12-05", count: 4 },
+    { date: "2017-12-19", count: 7 } 
+  ];
+  
   // Carga de datos de salarios
   useEffect(() => {
     const recibirDatosSalarios = async () => {
@@ -33,8 +60,7 @@ export default function App() {
           const datosBD = doc.data();
           const { nombre, salario } = datosBD;
             nombres.push(nombre); // Agrega nombre a la lista
-            salarios.push(salario); // Agrega salario a la lista
-
+            salarios.push(salario); // Agrega edad a la lista
         });
 
         // Actualiza el estado con el formato requerido
@@ -77,14 +103,14 @@ export default function App() {
           {
             name: "Masculino",
             population: masculino,
-            color: "rgba(131, 167, 234, 0.5)",
+            color: "rgba(131, 167, 234, 0.5)",  // Azul con 50% de intensidad
             legendFontColor: "#7F7F7F",
             legendFontSize: 12
           },
           {
             name: "Femenino",
             population: femenino,
-            color: "rgba(255, 105, 180, 0.5)",
+            color: "rgba(255, 105, 180, 0.5)",  // Rosa con 50% de intensidad
             legendFontColor: "#7F7F7F",
             legendFontSize: 12
           }
@@ -100,39 +126,14 @@ export default function App() {
     recibirDatosGeneros();
   }, [bandera]);
 
-  const dataReporteEnfermedades = [
-    { date: "2017-01-05", count: 8 }, 
-    { date: "2017-01-19", count: 5 }, 
-    { date: "2017-02-06", count: 2 }, 
-    { date: "2017-02-20", count: 4 }, 
-    { date: "2017-03-07", count: 1 }, 
-    { date: "2017-03-21", count: 3 }, 
-    { date: "2017-04-05", count: 6 }, 
-    { date: "2017-04-19", count: 2 }, 
-    { date: "2017-05-03", count: 4 },
-    { date: "2017-05-17", count: 7 },
-    { date: "2017-06-06", count: 9 }, 
-    { date: "2017-06-20", count: 5 }, 
-    { date: "2017-07-05", count: 3 }, 
-    { date: "2017-07-19", count: 4 }, 
-    { date: "2017-08-07", count: 2 },  
-    { date: "2017-08-21", count: 8 },  
-    { date: "2017-09-06", count: 3 },
-    { date: "2017-09-20", count: 7 },
-    { date: "2017-10-04", count: 5 },
-    { date: "2017-10-18", count: 6 },
-    { date: "2017-10-20", count: 9 },
-    { date: "2017-11-06", count: 2 },
-    { date: "2017-11-20", count: 9 }, 
-    { date: "2017-12-05", count: 4 },
-    { date: "2017-12-19", count: 7 } 
-  ];
-
   return (
     <View style={styles.container} >
       <ScrollView contentContainerStyle={styles.scrollView}>
-        <Formulario setBandera={setBandera}/>
-        <Graficos/>
+        {/* <Formulario setBandera={setBandera}/> */}
+        <GraficoSalarios dataSalarios={dataSalarios}/>
+        <GraficoBezier dataSalarios={dataSalarios}/>
+        <GraficoGeneros dataGeneros={dataGeneros}/>
+        <GraficoReporteEnfermedades dataReporteEnfermedades={dataReporteEnfermedades}/>
       </ScrollView>
 
     </View>
@@ -152,4 +153,4 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 10,
   },
-});
+}); 

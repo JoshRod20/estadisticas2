@@ -85,7 +85,9 @@ export default function GraficoReporteEnfermedades({ dataReporteEnfermedades }) 
           }}
         />
       </ScrollView>
-      <Button title="Generar y Compartir PDF" onPress={generarPDF} />
+      <View style={styles.button}>
+        <Button title="Generar y Compartir PDF" onPress={generarPDF} />
+      </View>
     </View>
   );
 }
@@ -93,5 +95,8 @@ export default function GraficoReporteEnfermedades({ dataReporteEnfermedades }) 
 const styles = StyleSheet.create({
   container: {
     margin: 10,
+  },
+  button: {
+    marginTop: 10,
   },
 });
